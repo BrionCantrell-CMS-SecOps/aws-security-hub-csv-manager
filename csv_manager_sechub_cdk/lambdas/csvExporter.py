@@ -206,10 +206,13 @@ def lambdaHandler ( event = None, context = None ):
     # The event keys we care about are processed below
     role = event.get("role")
     region = event.get("region")
-    if 'filters' in (event.keys()):
-        filters=getFilters(event.get("filters", {}))
-    else:
-        filters=event
+    filters={
+        'GeneratorId': [
+                    {'Value': "cms.Chef Inspec",
+                     'Comparison': 'EQUALS'
+                    }
+            ]
+        }
     bucket = event.get("bucket")
     retain = event.get("retainLocal", False)
     limit = event.get("limit", 0)
@@ -292,7 +295,13 @@ if __name__ == "__main__":
 
         executor(
             role=arguments.roleArn, 
-            filters=getFilters(arguments.filters),
+            filters={
+                'GeneratorId': [
+                    {'Value': "cms.Chef Inspec",
+                     'Comparison': 'EQUALS'
+                    }
+                ]
+            },
             bucket=arguments.bucket, 
             limit=arguments.limit, 
             retain=arguments.retainLocal,
